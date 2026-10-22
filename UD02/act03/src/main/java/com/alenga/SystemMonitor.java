@@ -194,11 +194,11 @@ public class SystemMonitor {
         System.out.println(diskMonitor.getName() + " status: " + diskMonitor.getState());
         System.out.println(processMonitor.getName() + " status: " + processMonitor.getState());
 
-        System.out.println("\nMonitorización finalizada.");
+        System.out.println("\n\nMonitorización finalizada.");
 
         // PREGUNTAS
         System.out.println("""
-                \n
+
                 ● ¿En qué estado se encuentra un hilo antes de ejecutar start()?
                     NEW
 
