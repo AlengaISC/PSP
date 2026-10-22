@@ -60,10 +60,10 @@ public class Downloads {
         });
 
         System.out.println("Downloads starting...");
-        videoDownload.start();
-        musicDownload.start();
-        imageDownload.start();
-        photoshopDownload.start();
+        videoDownload.run();
+        musicDownload.run();
+        imageDownload.run();
+        photoshopDownload.run();
 
         try {
             videoDownload.join();
