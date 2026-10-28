@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class SystemMonitor {
+
+    // 8. Sexta parte. Memoria compartida
+    static Report report = new Report();
+
     public static void main(String[] args) {
         clear();
 
@@ -36,7 +40,8 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
-                    System.out.println(readString);
+                    report.memory = readString;
+                    // System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
@@ -53,8 +58,8 @@ public class SystemMonitor {
                 }
             }
 
-            System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
-            System.out.println(readString);
+            // System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
+            // System.out.println(readString);
 
         }, "Monitor-RAM");
 
@@ -87,7 +92,8 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
-                    System.out.println(readString);
+                    report.disk = readString;
+                    // System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
@@ -104,8 +110,8 @@ public class SystemMonitor {
                 }
             }
 
-            System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
-            System.out.println(readString);
+            // System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
+            // System.out.println(readString);
 
         }, "Monitor-DISK");
 
@@ -138,7 +144,8 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
-                    System.out.println(readString);
+                    report.processes = readString;
+                    // System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
@@ -155,12 +162,17 @@ public class SystemMonitor {
                 }
             }
 
-            System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
-            System.out.println(readString);
+            // System.out.println("\n\n\n" + Thread.currentThread().getName() + " Output:");
+            // System.out.println(readString);
 
         }, "Monitor-PROCESS");
 
         // ---------------------------------------------------------------------------------
+
+        System.out.println("""
+                =================================
+                    MONITOR DEL SISTEMA
+                =================================""");
 
         // Hilos sin iniciar
         System.out.println(ramMonitor.getName() + " status: " + ramMonitor.getState());
@@ -168,6 +180,8 @@ public class SystemMonitor {
         System.out.println(processMonitor.getName() + " status: " + processMonitor.getState());
 
         // Iniciar hilos y consultar su estado
+        System.out.println("\nIniciando monitorización...\n");
+
         // System.out.println("Started thread: " + ramMonitor.getName());
         ramMonitor.start();
         System.out.println(ramMonitor.getName() + " status: " + ramMonitor.getState());
@@ -177,10 +191,12 @@ public class SystemMonitor {
         // System.out.println("Started thread: " + processMonitor.getName());
         processMonitor.start();
         System.out.println(processMonitor.getName() + " status: " + processMonitor.getState());
+        System.out.println();
 
         // Interrumpir los hilos tras 10s
         try {
             Thread.sleep(10000);
+            System.out.println("Solicitando finalización...");
             ramMonitor.interrupt();
             ramMonitor.join();
             diskMonitor.interrupt();
@@ -192,25 +208,47 @@ public class SystemMonitor {
         }
 
         // Hilos tras ser interrumpidos
-        System.out.println("\n\n\n");
+        System.out.println();
         System.out.println(ramMonitor.getName() + " status: " + ramMonitor.getState());
         System.out.println(diskMonitor.getName() + " status: " + diskMonitor.getState());
         System.out.println(processMonitor.getName() + " status: " + processMonitor.getState());
 
+        // Mostrar resultados del informe
+        System.out.println("""
+                =================================
+                    INFORME FINAL
+                =================================""");
+
+        System.out.println("\nMEMORIA:" + report.memory);
+        System.out.println("\nDISCO:" + report.disk);
+        System.out.println("\nPROCESOS:" + report.processes);
+
         System.out.println("\n\nMonitorización finalizada.");
 
         // PREGUNTAS
-        System.out.println("""
+        System.out.println(
+                """
+                        ● ¿En qué estado se encuentra un hilo antes de ejecutar start()?
+                            NEW
 
-                ● ¿En qué estado se encuentra un hilo antes de ejecutar start()?
-                    NEW
+                        ● ¿Qué estados puedes observar durante la monitorización?
+                            RUNNABLE o BLOCKED
 
-                ● ¿Qué estados puedes observar durante la monitorización?
-                    RUNNABLE o BLOCKED
+                        ● ¿Qué estado tienen los hilos después de que join() haya terminado?
+                            TERMINATED
 
-                ● ¿Qué estado tienen los hilos después de que join() haya terminado?
-                    TERMINATED
-                                """);
+                        9. Preguntas para entregar:
+                            1. ¿Cuántos hilos crea explícitamente la aplicación?
+                                3 explícitos + el hilo del main.
+
+                            2. ¿Qué diferencia existe entre los hilos de Java y los procesos Linux que ejecutan?
+                            3. ¿Por qué necesitamos waitFor() y join() en el mismo programa?
+                            4. ¿Qué sucede cuando el hilo principal solicita la interrupción de los trabajadores?
+                            5. ¿Por qué un hilo que ejecuta Thread.sleep() puede encontrarse en estado TIMED_WAITING?
+                            6. ¿Qué ocurriría si eliminásemos los join() y mostrásemos el informe inmediatamente después de solicitar las interrupciones?
+                            7. ¿Cómo pueden los tres hilos acceder al mismo objeto Informe?
+                            8. ¿Por qué en esta práctica cada hilo modifica un atributo diferente del objeto compartido?
+                                        """);
 
     }
 
