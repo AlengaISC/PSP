@@ -36,6 +36,7 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
+                    System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
@@ -86,6 +87,7 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
+                    System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
@@ -136,6 +138,7 @@ public class SystemMonitor {
 
                     // Consulta realizada
                     System.out.println("Consulta realizada " + Thread.currentThread().getName());
+                    System.out.println(readString);
 
                     // Esperar a que termine el proceso y esperar 2 segundos
                     try {
